@@ -1,80 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ユウマのポートフォリオ</title>
-  </head>
-  <body>
-    <h1>ユウマ</h1>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="サッカー分析と動画編集に興味のあるユウマのポートフォリオ。">
+  <title>ユウマのポートフォリオ</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+      background: #111b18;
+      color: #f3f6ef;
+      --accent: #d3fa80;
+      --muted: #becac0;
+      --line: #43564a;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; line-height: 1.75; }
+    a { color: inherit; text-underline-offset: .25em; }
+    a:hover { color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .wrap { width: min(1080px, calc(100% - 40px)); margin-inline: auto; }
+    header { border-bottom: 1px solid var(--line); }
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 17px; }
+    .brand { color: var(--accent); font-weight: 800; text-decoration: none; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .875rem; }
+    nav a { text-decoration: none; }
+    .hero { padding-block: clamp(40px, 8vw, 94px); border-bottom: 1px solid var(--line); }
+    h1, h2, h3, p, figure { margin: 0; }
+    h1 { font-size: clamp(2.15rem, 5.8vw, 4.4rem); line-height: 1.18; letter-spacing: -.04em; }
+    h1 span { color: var(--accent); }
+    .hero p { margin-top: 19px; max-width: 46ch; color: var(--muted); }
+    main section { padding-block: 36px; }
+    h2 { font-size: clamp(1.55rem, 4vw, 2.1rem); margin-bottom: 15px; line-height: 1.35; }
+    h3 { font-size: 1.35rem; }
+    .work { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 24px; align-items: center; padding: clamp(16px, 3vw, 28px); border: 1px solid var(--line); border-radius: 20px; background: #1a2a21; }
+    .work p { color: var(--muted); margin: 9px 0 18px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { font: inherit; font-weight: 700; font-size: .875rem; padding: 8px 12px; min-height: 44px; border-radius: 8px; border: 1px solid var(--line); background: #273c30; color: inherit; cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    #draw { background: var(--accent); color: #18241a; }
+    canvas { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid #59715d; background: #132c22; touch-action: none; }
+    #notice { color: var(--muted); font-size: .875rem; margin: 9px 0 0; min-height: 1.75em; }
+    .details { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; border-top: 1px solid var(--line); }
+    .details section p, dd { color: var(--muted); }
+    dl { margin: 0; }
+    dl div { display: grid; grid-template-columns: 6.7rem 1fr; gap: 12px; padding-block: 9px; border-bottom: 1px solid var(--line); }
+    dt { color: var(--accent); font-weight: 700; }
+    dd { margin: 0; }
+    footer { border-top: 1px solid var(--line); padding-block: 20px; font-size: .875rem; color: var(--muted); }
+    @media (max-width: 680px) {
+      .wrap { width: calc(100% - 32px); }
+      .bar { align-items: start; }
+      nav { gap: 4px 14px; justify-content: end; }
+      .work, .details { grid-template-columns: 1fr; }
+      .details { gap: 0; }
+      .details section + section { padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap bar">
+      <a class="brand" href="#top">ユウマ</a>
+      <nav aria-label="ページ内ナビゲーション">
+        <a href="#works">作品</a>
+        <a href="#profile">プロフィール</a>
+        <a href="#skills">使用技術</a>
+      </nav>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <div class="hero">
+      <h1><span>ユウマ</span>のポートフォリオ</h1>
+      <p>サッカー観戦や試合分析、動画編集が好きです。ピッチ上で選手やボールがどう動くかに注目して、試合を見ています。</p>
+    </div>
+    <section id="works" aria-labelledby="works-title">
+      <h2 id="works-title">作品</h2>
+      <article class="work">
+        <div>
+          <h3>ピッチに軌跡を描く</h3>
+          <p id="instructions">ピッチの上でカーソルを動かすか、指でなぞると、色のついた粒が軌跡を描きます。「軌跡を描く」を押すと、パスの例が表示されます。</p>
+          <div class="actions">
+            <button id="draw" type="button">軌跡を描く</button>
+            <button id="clear" type="button">消去</button>
+          </div>
+          <p id="notice" role="status"></p>
+        </div>
+        <figure>
+          <canvas id="pitch" width="660" height="410" aria-label="サッカーのピッチとボールの軌跡" aria-describedby="instructions">サッカーのピッチに、動きに合わせて色の粒を描く作品です。</canvas>
+        </figure>
+      </article>
+    </section>
+    <div class="details">
+      <section id="profile" aria-labelledby="profile-title">
+        <h2 id="profile-title">プロフィール</h2>
+        <p>石川県在住。サッカーの試合で気になった場面を映像で見返すのが好きです。</p>
+      </section>
+      <section id="skills" aria-labelledby="skills-title">
+        <h2 id="skills-title">使用技術</h2>
+        <dl>
+          <div><dt>HTML</dt><dd>自己紹介と作品ページの構成</dd></div>
+          <div><dt>CSS</dt><dd>配色と画面幅に応じたレイアウト</dd></div>
+          <div><dt>JavaScript</dt><dd>ポインターの動きに合わせた粒の描画</dd></div>
+        </dl>
+      </section>
+    </div>
+  </main>
+  <footer><div class="wrap">ユウマ</div></footer>
+  <script>
+    const pitch = document.querySelector('#pitch');
+    const pen = pitch.getContext('2d');
+    const notice = document.querySelector('#notice');
+    let hue = 64;
+
+    function paintPitch() {
+      pen.fillStyle = '#132c22';
+      pen.fillRect(0, 0, pitch.width, pitch.height);
+      pen.fillStyle = '#1c382a';
+      for (let x = 34; x < 626; x += 148) {
+        pen.fillRect(x, 32, 74, 346);
+      }
+      pen.strokeStyle = '#71917c';
+      pen.lineWidth = 2;
+      pen.strokeRect(34, 32, 592, 346);
+      pen.strokeRect(34, 112, 100, 186);
+      pen.strokeRect(526, 112, 100, 186);
+      pen.strokeRect(34, 160, 38, 90);
+      pen.strokeRect(588, 160, 38, 90);
+      pen.beginPath();
+      pen.moveTo(330, 32);
+      pen.lineTo(330, 378);
+      pen.stroke();
+      pen.beginPath();
+      pen.arc(330, 205, 53, 0, Math.PI * 2);
+      pen.stroke();
+    }
+
+    function drawParticles(x, y) {
+      for (let particle = 0; particle < 6; particle++) {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 22;
+        const radius = 1 + Math.random() * 4;
+        pen.fillStyle = 'hsla(' + hue + ', 88%, 71%, 0.72)';
+        pen.beginPath();
+        pen.arc(x + Math.cos(angle) * distance, y + Math.sin(angle) * distance, radius, 0, Math.PI * 2);
+        pen.fill();
+      }
+      hue = (hue + 2) % 360;
+    }
+
+    function drawExample() {
+      paintPitch();
+      hue = 64;
+      for (let x = 86; x <= 574; x += 6) {
+        const progress = (x - 86) / 488;
+        const y = 260 - progress * 104 + Math.sin(progress * Math.PI * 2) * 50;
+        drawParticles(x, y);
+      }
+    }
+
+    function drawAtPointer(event) {
+      const bounds = pitch.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width * pitch.width;
+      const y = (event.clientY - bounds.top) / bounds.height * pitch.height;
+      drawParticles(x, y);
+    }
+
+    pitch.addEventListener('pointerdown', drawAtPointer);
+    pitch.addEventListener('pointermove', drawAtPointer);
+    document.querySelector('#draw').addEventListener('click', () => {
+      drawExample();
+      notice.textContent = 'パスの例を表示しました。';
+    });
+    document.querySelector('#clear').addEventListener('click', () => {
+      paintPitch();
+      notice.textContent = '軌跡を消去しました。';
+    });
+    drawExample();
+  </script>
+</body>
 </html>
-
-    <h2>About</h2>
-    <p>
-      簡単な自己紹介やアピール。<br>
-      どんなことができる、したいのか。
-    </p>
-
-    <h3>Profile</h3>
-    <ul>
-      <li>名前 ユウマ</li>
-      <li>石川県在住</li>
-      <li>得意領域（サッカー観戦、サッカー分析、動画編集）</li>
-    </ul>
-
-    <h3>Skills</h3>
-    <table>
-      <tr>
-        <th>OS</th>
-        <td>Windows, Ubuntu など</td>
-      </tr>
-      <tr>
-        <th>Engine, Frameworks</th>
-        <td>Node.js, Express など</td>
-      </tr>
-      <tr>
-        <th>Tool, MiddleWare</th>
-        <td>Git, PostgreSQL など</td>
-      </tr>
-      <tr>
-        <th>資格・免許</th>
-        <td>情報処理技術者、LPIC など</td>
-      </tr>
-    </table>
-
-    <h3>Works</h3>
-    <p>アピールできる活動内容を書きましょう。</p>
-    <ul>
-      <li><a href="https://github.com/">GitHub</a></li>
-      <li><a href="https://qiita.com/">Qiita</a></li>
-      <li><a href="https://zenn.dev/">Zenn</a></li>
-      <li>
-        作った作品
-        <ul>
-          <li><a href="https://example.com/">作品 1</a></li>
-          <li><a href="https://example.com/">作品 2</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <h3>Contact</h3>
-    <p>連絡先や SNS のアカウントを書きましょう。</p>
-    <ul>
-      <li><a href="mailto:name@example.com">Mail</a></li>
-      <li><a href="https://twitter.com/n_yobikou">X(旧 Twitter)</a></li>
-      <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
-    </ul>
-
-    <h3>History</h3>
-    <p>学歴、職歴、アルバイト、インターン経験など。</p>
-    <table>
-      <tr>
-        <th>2019 年</th>
-        <td><a href="https://dwango.co.jp/">株式会社ドワンゴ</a> 入社</td>
-      </tr>
-      <tr>
-        <th>2018 年</th>
-        <td>学校法人角川ドワンゴ学園 <a href="https://nnn.ed.jp/">N高等学校</a> 卒業</td>
-      </tr>
-     </table>
